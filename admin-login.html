@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Login – SmartTransit</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #0a0f1e; --bg2: #0f1629; --bg3: #131d35;
+    --card: #192342; --card2: #1e2b4a;
+    --border: rgba(99,145,255,0.15); --border2: rgba(99,145,255,0.28);
+    --blue: #4f8ef7; --blue2: #7baeff;
+    --teal: #2ee8c0; --teal2: #1ac9a5;
+    --amber: #f0a940; --red: #f05560; --green: #44d480; --purple: #a78bfa;
+    --text: #e8eeff; --text2: #8a9bc4; --text3: #5a6b8a;
+    --radius: 12px; --radius2: 8px;
+  }
+  body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; overflow-x: hidden; font-size: 14px; }
+
+  .auth-grid { display: grid; grid-template-columns: 1fr 1fr; min-height: 100vh; width: 100%; }
+  .auth-left { background: linear-gradient(135deg, #130d2e 0%, #1e1248 60%, #2a1865 100%); display: flex; flex-direction: column; justify-content: center; align-items: flex-start; padding: 60px; position: relative; overflow: hidden; }
+  .auth-left::before { content: ''; position: absolute; top: -80px; right: -80px; width: 360px; height: 360px; border-radius: 50%; background: radial-gradient(circle, rgba(167,139,250,0.18) 0%, transparent 70%); }
+  .auth-left::after { content: ''; position: absolute; bottom: -60px; left: -60px; width: 280px; height: 280px; border-radius: 50%; background: radial-gradient(circle, rgba(79,142,247,0.12) 0%, transparent 70%); }
+  .auth-brand { display: flex; align-items: center; gap: 12px; margin-bottom: 48px; }
+  .auth-brand-icon { width: 48px; height: 48px; background: linear-gradient(135deg, var(--purple), var(--blue)); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 24px; }
+  .auth-brand-name { font-size: 22px; font-weight: 700; color: #fff; letter-spacing: -0.3px; }
+  .auth-brand-name span { color: var(--purple); }
+  .auth-tagline { font-size: 32px; font-weight: 700; color: #fff; line-height: 1.25; margin-bottom: 20px; letter-spacing: -0.5px; }
+  .auth-tagline em { color: var(--purple); font-style: normal; }
+  .auth-desc { font-size: 15px; color: rgba(255,255,255,0.6); line-height: 1.6; max-width: 360px; margin-bottom: 48px; }
+  .auth-stats { display: flex; gap: 32px; }
+  .auth-stat-num { font-size: 28px; font-weight: 700; color: #fff; }
+  .auth-stat-lab { font-size: 12px; color: rgba(255,255,255,0.5); margin-top: 2px; }
+  .transit-anim { position: absolute; bottom: 40px; right: 0; left: 0; overflow: hidden; height: 60px; }
+  .train-track { position: absolute; bottom: 20px; left: 0; right: 0; height: 2px; background: rgba(167,139,250,0.2); }
+  .train { position: absolute; bottom: 24px; display: flex; gap: 4px; animation: trainMove 8s linear infinite; }
+  .train-car { width: 48px; height: 22px; background: var(--purple); border-radius: 4px; position: relative; }
+  .train-car::after { content: ''; position: absolute; bottom: -6px; left: 6px; width: 8px; height: 8px; border-radius: 50%; background: var(--text2); }
+  .train-car:first-child { background: linear-gradient(90deg, var(--blue), var(--purple)); }
+  @keyframes trainMove { 0% { left: -200px; } 100% { left: 110%; } }
+  .auth-right { background: var(--bg); display: flex; align-items: center; justify-content: center; padding: 40px; overflow-y: auto; }
+  .auth-card { width: 100%; max-width: 420px; }
+  .auth-form-title { font-size: 22px; font-weight: 700; margin-bottom: 6px; }
+  .auth-form-sub { font-size: 13px; color: var(--text2); margin-bottom: 28px; }
+  .form-group { margin-bottom: 16px; }
+  .form-label { font-size: 12px; font-weight: 600; color: var(--text2); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; display: block; }
+  .form-input { width: 100%; background: var(--card); border: 1px solid var(--border2); border-radius: var(--radius2); padding: 11px 14px; color: var(--text); font-size: 14px; outline: none; transition: border-color 0.2s; }
+  .form-input:focus { border-color: var(--purple); }
+  .form-input::placeholder { color: var(--text3); }
+  .btn-primary { width: 100%; background: linear-gradient(90deg, var(--purple), var(--blue)); border: none; border-radius: var(--radius2); padding: 13px; color: #fff; font-size: 15px; font-weight: 600; cursor: pointer; transition: opacity 0.2s; }
+  .btn-primary:hover { opacity: 0.9; }
+  .auth-divider { text-align: center; color: var(--text3); font-size: 12px; margin: 18px 0; position: relative; }
+  .auth-divider::before { content: ''; position: absolute; top: 50%; left: 0; right: 0; height: 1px; background: var(--border); }
+  .auth-divider span { background: var(--bg); position: relative; padding: 0 12px; }
+  .social-btn { width: 100%; background: var(--card); border: 1px solid var(--border2); border-radius: var(--radius2); padding: 11px; color: var(--text); font-size: 14px; font-weight: 500; cursor: pointer; margin-bottom: 8px; display: flex; align-items: center; justify-content: center; gap: 8px; }
+  .social-btn:hover { background: var(--card2); }
+  .error-msg { background: rgba(240,85,96,0.12); border: 1px solid rgba(240,85,96,0.3); border-radius: var(--radius2); padding: 10px 14px; color: var(--red); font-size: 13px; margin-bottom: 14px; display: none; }
+  .role-badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(167,139,250,0.1); border: 1px solid rgba(167,139,250,0.3); border-radius: 20px; padding: 5px 14px; font-size: 12px; color: var(--purple); font-weight: 600; margin-bottom: 24px; }
+  .security-notice { background: rgba(167,139,250,0.07); border: 1px solid rgba(167,139,250,0.2); border-radius: var(--radius2); padding: 12px 14px; font-size: 12px; color: var(--text3); margin-top: 16px; display: flex; align-items: flex-start; gap: 8px; }
+  .portal-links { margin-top: 20px; padding-top: 18px; border-top: 1px solid var(--border); text-align: center; font-size: 12px; color: var(--text3); }
+  .portal-links a { color: var(--blue); cursor: pointer; text-decoration: none; margin: 0 8px; }
+  @media(max-width:700px){ .auth-grid{grid-template-columns:1fr;} .auth-left{display:none;} }
+</style>
+</head>
+<body>
+<div class="auth-grid">
+  <div class="auth-left">
+    <div class="auth-brand">
+      <div class="auth-brand-icon">⚙️</div>
+      <div>
+        <div class="auth-brand-name">Smart<span>Transit</span></div>
+        <div style="font-size:11px;color:rgba(255,255,255,0.4);margin-top:1px;">System Administration Portal</div>
+      </div>
+    </div>
+    <div class="auth-tagline">Total control.<br><em>Zero compromise.</em></div>
+    <div class="auth-desc">Fleet management, passenger records, staff oversight, analytics, route configuration and full system control — all in one secure admin panel.</div>
+    <div class="auth-stats">
+      <div><div class="auth-stat-num">50+</div><div class="auth-stat-lab">Passengers</div></div>
+      <div><div class="auth-stat-num">20</div><div class="auth-stat-lab">Conductors</div></div>
+      <div><div class="auth-stat-num">25</div><div class="auth-stat-lab">Routes</div></div>
+    </div>
+    <div class="transit-anim">
+      <div class="train-track"></div>
+      <div class="train"><div class="train-car"></div><div class="train-car"></div><div class="train-car"></div></div>
+    </div>
+  </div>
+
+  <div class="auth-right">
+    <div class="auth-card">
+      <div class="role-badge"><i class="ti ti-settings"></i> Administrator Access</div>
+      <div class="auth-form-title">Admin Login</div>
+      <div class="auth-form-sub">Restricted — authorised personnel only</div>
+      <div id="signinError" class="error-msg"><i class="ti ti-alert-circle"></i> Invalid admin credentials.</div>
+      <div class="form-group"><label class="form-label">Admin Email</label><input class="form-input" type="email" id="siEmail" placeholder="admin@smarttransit.in"></div>
+      <div class="form-group"><label class="form-label">Password</label><input class="form-input" type="password" id="siPass" placeholder="••••••••" onkeydown="if(event.key==='Enter')doSignIn()"></div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
+        <label style="display:flex;align-items:center;gap:6px;font-size:13px;color:var(--text2);cursor:pointer;"><input type="checkbox" style="accent-color:var(--purple)"> Remember me</label>
+        <a style="font-size:13px;color:var(--blue);cursor:pointer;">Forgot password?</a>
+      </div>
+      <button class="btn-primary" onclick="doSignIn()">Sign In as Admin →</button>
+      <div class="auth-divider"><span>quick demo access</span></div>
+      <button class="social-btn" onclick="quickLogin()">⚙️ Demo as Admin (Priya Admin)</button>
+      <div style="font-size:11px;color:var(--text3);text-align:center;margin-top:8px">Email: admin@smarttransit.in &nbsp;|&nbsp; Password: transit123</div>
+      <div class="security-notice">
+        <i class="ti ti-lock" style="color:var(--purple);margin-top:1px;flex-shrink:0"></i>
+        <span>This portal is restricted to system administrators. All login attempts are logged and monitored.</span>
+      </div>
+      <div class="portal-links">
+        Other portals: <a href="passenger-login.html">Passenger</a> · <a href="conductor-login.html">Conductor</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function fmtDate(d){return d.toISOString().split('T')[0];}
+const ADMIN={id:'ADM1',name:'Priya Admin',email:'admin@smarttransit.in',password:'transit123',role:'admin',avatar:'PA',designation:'System Administrator',phone:'+91 9840012345',accessLevel:'Full System Access',joinDate:fmtDate(new Date(2022,3,12))};
+
+function lsSet(k,v){try{localStorage.setItem('st_'+k,JSON.stringify(v));}catch(e){}}
+
+function doSignIn(){
+  const email=document.getElementById('siEmail').value.trim().toLowerCase();
+  const pass=document.getElementById('siPass').value;
+  const errEl=document.getElementById('signinError');
+  if(email!==ADMIN.email||pass!==ADMIN.password){
+    errEl.style.display='flex';errEl.innerHTML='<i class="ti ti-alert-circle"></i> Invalid admin credentials.';return;
+  }
+  errEl.style.display='none';
+  loginUser(ADMIN);
+}
+
+function quickLogin(){
+  loginUser(ADMIN);
+}
+
+function loginUser(u){
+  lsSet('session',u);
+  window.location.href='admin-dashboard.html';
+}
+</script>
+</body>
+</html>
